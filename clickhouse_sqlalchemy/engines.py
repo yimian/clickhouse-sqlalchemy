@@ -142,12 +142,12 @@ class SummingMergeTree(MergeTree):
     def _set_parent(self, table):
         super(SummingMergeTree, self)._set_parent(table)
 
-        if self.summing_cols:
+        if self.summing_cols is not None:
             self.summing_cols._set_parent(table)
 
     def get_params(self):
         params = super(SummingMergeTree, self).get_params()
-        if self.summing_cols:
+        if self.summing_cols is not None:
             params.append(
                 tuple(self.summing_cols.get_expressions_or_columns())
             )
@@ -163,18 +163,18 @@ class ReplacingMergeTree(MergeTree):
         )
 
         self.version_col = None
-        if version_col:
+        if version_col is not None:
             self.version_col = TableCol(version_col)
 
     def _set_parent(self, table):
         super(ReplacingMergeTree, self)._set_parent(table)
 
-        if self.version_col:
+        if self.version_col is not None:
             self.version_col._set_parent(table)
 
     def get_params(self):
         params = super(ReplacingMergeTree, self).get_params()
-        if self.version_col:
+        if self.version_col is not None:
             params.append(self.version_col.get_column())
         return params
 
