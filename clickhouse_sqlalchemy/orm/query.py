@@ -35,6 +35,7 @@ class Query(BaseQuery):
 
     def join(self, *props, **kwargs):
         global_ = kwargs.pop('global_', False)
+        array = kwargs.pop('array', False)
 
         any_ = kwargs.pop('any', None)
         all_ = kwargs.pop('all', None)
@@ -52,6 +53,7 @@ class Query(BaseQuery):
             orm_join.any = any_
             orm_join.all = all_
             orm_join.global_ = global_
+            orm_join.array = array
 
         return rv
 
@@ -74,5 +76,6 @@ class Query(BaseQuery):
             orm_join.any = any_
             orm_join.all = all_
             orm_join.global_ = global_
+            orm_join.array = False
 
         return rv
