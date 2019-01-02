@@ -53,7 +53,22 @@ class Query(BaseQuery):
             orm_join.any = any_
             orm_join.all = all_
             orm_join.global_ = global_
-            orm_join.array = array
+            orm_join.array = False
+
+        return rv
+
+    def arrayjoin(self, *props, **kwargs):
+        rv = super(Query, self).join(*props, **kwargs)
+        diff = set(rv._from_obj) - set(self._from_obj)
+
+        assert len(diff) < 2
+
+        if diff:
+            orm_join = diff.pop()
+            orm_join.any = False
+            orm_join.all = False
+            orm_join.global_ = False
+            orm_join.array = True
 
         return rv
 

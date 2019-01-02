@@ -1,6 +1,8 @@
 from sqlalchemy import Column, exc, func, literal
+from sqlalchemy import alias
 from sqlalchemy import text
 from sqlalchemy import tuple_
+from sqlalchemy.orm import aliased
 
 from clickhouse_sqlalchemy import types, Table
 from clickhouse_sqlalchemy.ext.clauses import Lambda
@@ -142,6 +144,23 @@ class JoinTestCase(BaseTestCase):
             "GLOBAL ALL LEFT OUTER JOIN t1 USING x, y"
         )
 
+    def test_array_join(self):
+        table = Table(
+            'arrays_test', self.metadata(),
+            Column('s', types.String, primary_key=True),
+            Column('arr', types.Array(types.UInt8)),
+        )
+        a = table.c.arr.label('name')
+
+        query = session.query(table.c.arr, a.name).arrayjoin(a)
+        print(self.compile(query))
+        2/0
+
+        # self.assertEqual(
+        #     self.compile(query),
+        #     "SELECT x AS t0_x, x AS t1_x FROM t0 "
+        #     "GLOBAL ALL LEFT OUTER JOIN t1 USING x, y"
+        # )
 
 class YieldTest(NativeSessionTestCase):
     def test_yield_per_and_execution_options(self):

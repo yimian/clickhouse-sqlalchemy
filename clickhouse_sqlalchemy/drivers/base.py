@@ -130,6 +130,7 @@ class ClickHouseCompiler(compiler.SQLCompiler):
     def visit_join(self, join, asfrom=False, **kwargs):
         # deal with ARRAY JOIN
         if join.array:
+            print(1/0)
             rights = [
                 x._compiler_dispatch(self, asfrom=True, **kwargs)
                 for x in join.right
